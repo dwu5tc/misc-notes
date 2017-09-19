@@ -1,0 +1,55 @@
+ACID
+	- atomicity: guarantee all or none of a transation happens. nothing (crash, power failure, error, etc.) allows for a state in which some related changes have happened
+	- consitency: consistent data (with valid state [???]); none of the constraints on related data will ever be violated
+	- isolation: one transation cannot read data from another that hasn't yet completed. 2 concurrently executing transations see the world as if they were sequentially executed [???]. if one needs to read data written by another, it will have to wait until the other is finished
+	durability: once a transation = complete, gurantee all changes have been recorded to a durable medium (e.g hard disk). as well the transaction completion itself is recorded 
+	
+	e.g
+	- A: transation to transfer funds involves withrawal + deposit. if deposit fails, withdrawal should not happen either 
+	- C: db tracking a checking account only alows unique check numbers to exist for each transation
+	- I: someone checking a balance = isolated from a concurrent transac involving a withdrawal from the same acccount. only when the transac commits successfully and the person checks again will the new balance be reported
+	- D: system crash (or other failure) not allowed to lose results of a transac or the contents of the db. often achieved through separated transation logs that can "re-create" all transacs from specific point (like a backup)
+
+introduction
+	- rdbms = relational db management sys
+	- mongodb = nosql
+	- relational dbs use tables/rows 
+		- impedance mismatch = misalignment of app layer objs to tables/rows
+		- might have to write a mapping layer or use ORM* to translate between the obj in memory and what is saved in the db (troublesome)
+	- mongodb uses collections
+	- mongo db has no schema. documents in the same collection can be diff
+	- scalability
+		- relational dbs
+			- required relational db engine to manage writes
+			- to ensure consistency and atomicity, tables/rows must be locked and only 1 write/access is allowed at a time
+			- protecting referential integrity across multiple tables/rows increases lock time
+			- inc lock time --> less writes/updates per sec --> higher latency of transactions --> slower app
+			- scaling out/replicating data to other servers = worse
+				- if relational engines try to enforce consistency and extend locks across the network, lock times are then longer --> transation latency higher --> slower app
+			- solution? 
+				- denormalization
+					- process of inc read performance at the expense of dec write performance by adding  redundant copies of data or by grouping data
+					- locks taken, taken only on a single table NOT several
+				- relax consistency
+					- allow dirty reads**. but might lose durability/consistency
+	- mongo's scalability solution 
+		- no schema to protect --> faster locking 
+		- single document write scope. documents live in a collection but updating documents = one at a time 
+			- simpler locking; no need to extend across collections, no relationships to enforce 
+		- mongo does not allow for locking across multiple servers 
+		- replica set consists of 1 pimary server which accepts all writes and several secondary servers (which will be replicated to); no locks extending from primary to secondaries
+		- capped collection = fixed size [???] 
+		- eventual consistency: eventually data will propogate from the primary to the secondaries 
+		- custom consistency
+			- several consistency models ranging from higher latency + absolute consistency to relaxed consistency and some guarantee of durability
+			- choice of latter --> returns control to app sooner
+			- consistency choices: complete, fire and forget, majority (or specified # of secondaries)
+				- fire and forget (limited durability): hand over update cmd to primary, control returned immediately. no guarantee primary doesn't fail (document never makes it to disk --> lost) 
+		- inconsistency issues caused by lag of propogating data from primary to secondaries 
+		- responsibility shift to the app since no schema enforcement
+	*object-relational mapping
+	**dirty read: reading a value from another transation which is not committed; chance that the value may rolled back
+	
+intro to mongodb
+	
+
