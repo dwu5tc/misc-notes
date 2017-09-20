@@ -61,18 +61,6 @@ replica set
 	- arbiter: does not store data. only purpose = break ties during elections
 	- ***LEARN [???]
 	
-	cd foo 
-	mkdir \foo\db1 \foo\db2 \foo\db3 
-	start "a" mongod --dbpath ./db1 --port 60000 --replSet "demo"
-	start "b" mongod --dbpath ./db1 --port 40000 --replSet "demo"
-	start "c" mongod --dbpath ./db1 --port 50000 --replSet "demo"
-	
-	mongo --port 30000
-	var demoConfig={_id: "demo", members: [{_id: 0, host: "localhost:60000", priority: 10}, {_id: 1, host: "localhost:40000"}, {_id: 2, host: "localhost:50000", arbiterOnly: true}]};
-	rs.initiate(demoConfig)
-	
-	
-	
 "C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe" --config "C:\Program Files\MongoDB\Server\3.4\mongod.cfg" --install
 	
 
