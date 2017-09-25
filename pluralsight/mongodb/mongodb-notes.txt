@@ -59,7 +59,10 @@ replica set
 	- primary: one and only writable instance
 	- secondary: read only instances. can have many of these --> scalability. data 	repliacted from primary. if primary fails, one of the secondaries takes over
 	- arbiter: does not store data. only purpose = break ties during elections
-	- ***LEARN [???]
+	- [... SKIPPED SECTION ...]
+	
+	db.getMongo()
+	rs.status()
 	
 	cd foo 
 	mkdir \foo\db1 \foo\db2 \foo\db3 
@@ -71,8 +74,80 @@ replica set
 	var demoConfig={_id: "demo", members: [{_id: 0, host: "localhost:60000", priority: 10}, {_id: 1, host: "localhost:40000"}, {_id: 2, host: "localhost:50000", arbiterOnly: true}]};
 	rs.initiate(demoConfig)
 	
-	
+	mongo --port 40000
+	db.setSlaveOk()	
 	
 "C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe" --config "C:\Program Files\MongoDB\Server\3.4\mongod.cfg" --install
+
+the mongo shell
+	- shell modes
+	- shell invoking syntax
+	- using eval
+	- substantial scripts
+	- excute script before entering
+	- shell keys and shortcuts
+		ctrl + a = start of line	
+		ctrl + e = end of line 
+		ctrl + k = delete rest of line
+		ctrl + l = clear screen
+	- external editor integration
+		set EDITOR="//PATH TO THE EDITOR" 
+	- load script
+		load("foo.js");	
+	- user RC file (run script each time enter shell)
+		- mongorc.js
+		- disabling
+			mongo --norc	
+
+saving data
+	[ ... ]
+	- BSON format
+		- advantages: [...]
+	- saving documents
+		- every document must have _id field 
+		- limit to 16mb
+	- cannot issue commands across multiple collections
+	
+	db, show collections
+	
+	- _id field can be anything EXCEPT an array 
+	- ObjectId() function returns diff object ID each time
+		- timestamped + [ ... ]
+		
+		ObjectId().getTimestamp()
+		
+	- _ids affect reading/writing/sorting and index management [???]
+	
+	- save vs insert
+		- save overwrites documents with same _id
+		- insert prevents overwriting (raises duplicate key error)
+		- doesn't make sense to use insert without _id field
+	
+	.find().pretty()
+	
+	- update
+		- atomic within a document
+		- update commands issued concurrently will be executed sequentially 
+		
+		db.foo.update(query, update, options) // options: one?  multi? upsert?
+		
+		$set, $unset, $inc, $rename, $push/$addToSet, $pull (remove all instances from array), $pop (1, -1),  
+	- find and modify	
+		db.foo.findAndModify({
+			query: <document>, // which document?
+			update: <document>, // what change?
+			upsert: <boolean>, 
+			remove: <boolean>, // delete?
+			new: <boolean>, // return the doc pre or post modification?
+			sort: <document>, // query order
+			fields <document> // return what?
+		})
+		
+- finding documents
+	
+			
+			
+
+
 	
 
