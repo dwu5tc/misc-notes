@@ -91,7 +91,7 @@ the mongo shell
 		ctrl + k = delete rest of line
 		ctrl + l = clear screen
 	- external editor integration
-		set EDITOR="//PATH TO THE EDITOR" 
+		set EDITOR="// PATH TO THE EDITOR" 
 	- load script
 		load("foo.js");	
 	- user RC file (run script each time enter shell)
@@ -155,23 +155,73 @@ saving data
 		- null and $exists 
 		- , acts as and &&?
 		
-		
 		- ARRAYS???
 		
-		- cursor (returns pointer)
-			var c = db.foo.find({}, {name: 1})
-			
-			c.size()
-			c.hasNext()
-			c.forEach(function(d) {print(d.name)})
-			c.sort({name: -1})
-			
-			db.foo.find({}, {_id: 1}).sort({name: -1})
+		db.foo.find({}, {_id: 1}).sort({name: -1})
 				- only ids returned (projection) but sorted but name
 				- proves sorting = done serverside 
+	- cursor (returns pointer)
+		var c = db.foo.find({}, {name: 1})
+		
+		c.size()
+		c.hasNext()
+		c.forEach(function(d) {print(d.name)})
+		c.sort({name: -1})
+		c.skip(5).limit(5)
+	- c.findOne({_id: 1})
+			
+indexing
+	- much faster than scanning all documents (must load into mem, then check for match)
+	- queries can be done against the index rather than against the document itself
+	- if index keys = sorted, documents can be sorted using the indexes
+	- indexing strategies
+		- regular (b-tree; for 1 or more fields) 
+		- geo (proximity to a center; sort by nearness)
+		- text (parsing text queries and comparing to text fields; search engine???)
+		- hashed (index on a certain field but optimized for sharding; spreads documents evenly across shards)
+		- TTL (time to live; documents removed when expired)
+	
+	db.foo.ensureIndex(keys, options)
+		- keys: which fields? what order? geo/text
+		- options: 
+			- name (manual vs set by mongo)? 
+			- build immediately (blocking other ops) or in the background? affects performance
+			- preserve uniqueness?
+			- sparse index?
+			- TTL index?
+			- language? which one used by the text search
+			- MORE...
+	- finding which indexes are used
+		db.system.indexes.find({ns: "test.animals"}, {key: 1}) // ns = namespace
+		
+		or 
+		
+		db.animals.find({name: "cat"}).explain()
+			>"cursor" : "BasicCursor"
+	- e.g 
+		db.animals.ensureIndex({name: 1}) // ascending???
+		db.system.indexes.find({ns: "test.animals"}, {key: 1})
+			> { "key" : {"_id" : 1 } } 
+			> { "key" : {"name" : 1 } }
+		db.animals.find({name: "cat"}).explain()
+			> "cursor" : "BtreeCursor name_1"
+			> "nscannedObjectsAllPlans" : 1 // was 6 before
+	- db.foo.dropIndex("name_1")
+		- canot drop "_id_" index
+	- sparse indexes
+		- [ ... ]
+	- db.animals.ensureIndex({name: 1}, {background: true})
+	- compound indexes
+	
+	- USE INDEXES!!!
+		
+		
+	
+			
+			
 			
 	
-	
+		
 			
 
 	
