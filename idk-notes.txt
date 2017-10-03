@@ -1,0 +1,22 @@
+- %SOME_VAR% 
+- @set 
+
+- | pipe
+- > redirect output
+- < redirect input 
+
+https://stackoverflow.com/questions/7727640/differences-among-grep-awk-and-sed
+
+- grep: search
+- awk/sed: text processors. search BUT ALSO add/remove/modify/etc
+	- awk mostly for data extraction, sed for stream editing
+
+- $sed -i 's/cat/dog/' file.txt 
+	- replaces occurrences of 'cat' with 'dog'
+
+- $awk '{print $2}' file.txt 
+	- prints the 2nd column of file.txt 
+	
+http://linuxsig.org/files/bash_scripting.html
+	- "" vs '' vs \ vs `` 
+	

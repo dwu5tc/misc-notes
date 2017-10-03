@@ -1,0 +1,87 @@
+emberjs notes
+
+MVC 
+- separates and isolates responsibilities
+- user interacts with controller 
+- controller manipulates data in model
+- model updates view layer 
+- view displayed to user
+
+	ember new <app-name> <options>
+
+templates
+
+	{{outlet}}
+
+- if no id provided, ember will auto-generate one
+
+	tagName="_____" 
+		- instruct ember to use a specific tag
+
+- helpers for tag generation and logic
+	- debugger: stop processing to enter debugger 
+	- each: loop [!!!]
+	- if: conditional
+	- input: create HTML input
+	- link-to: create HTML anchor
+
+		{{#link-to "<route-name>" <object-to-view>}}
+	
+	- log: console log
+	- textarea: create HTML textarea
+	- unless: conditional
+- outermost template: application temp
+
+routes
+- router (manages state) --> routers --> template (defines HTML)
+- responsible for collecting data and rendering proper templates
+
+	ember generate route <route-name>
+
+- hooks
+	- activate: triggered when navigation enters route
+	- deactivate: triggered when navigation leaves route 
+	- model: returns model data to use in route and template 
+	- redirect: send user to another route 
+
+models and services
+- service: long-living objects (singletons) that can be accessed throughout app
+	- centralized logging
+	- user sessions
+	- websocket management
+	- data repositories
+
+	ember generate service <service-name>
+
+- models: represent underlying (sometimes persisted) data of the app
+
+actions
+- map generic DOM events to specific app activities and functions
+- e.g
+	- click --> expandArticle
+	- keypup --> autoCompleteSearch
+	- submit --> createOrder
+- by default, actions prevent browser default activity (preventDefault)
+
+	on="click" 
+		- the default trigger
+
+computer properties
+- about 30 predefined computed property macros
+- e.g sum, mapBy, etc.
+
+components
+- reusable way to combine a template with action handling and behavior
+- used for
+	- charts
+	- tabs
+	- tree widgets
+	- buttons with confirmations
+	- data range selectors
+	- wrap libraries and services
+
+	ember generate component <component-name>
+
+
+questions/comments
+- services vs models???
