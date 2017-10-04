@@ -1,6 +1,8 @@
 /*
  * INTRO
  */
+
+
 var http = require('http');
 var fs = require('fs');
 
@@ -15,12 +17,13 @@ http.createServer(function(req, res) {
 		// can also pass contents into res.end() instead of res.write();
 	});
 }).listen(8080);
-
 // curl http://localhost:8080 --> issues a request 
+
 
 /*
  *	EVEMTS
  */
+
 var EventEmitter = require('events').EventEmitter;
 var logger = new EventEmitter();
 
@@ -44,9 +47,12 @@ http.createServer();
 server.on('request', function(req, res) {...});
 server.on('close', function() {...});
 
+
 /*
  * STREAMS
  */
+
+
 // echoes back request as response
 http.createServer(function(req, res) {
 	res.writeHead(200);
@@ -61,9 +67,10 @@ http.createServer(function(req, res) {
 	// });
 	req.pipe(res); // does same thing as above
 }).listen(8080);
-
 // curl -d 'hello' http://localhost:8080
 // returns hello on client
+// --------------------
+
 
 // copy a file
 var fs = require('fs');
@@ -89,6 +96,8 @@ http.createServer(function(req, res) {
 	});
 	req.pipe(newFile);
 }).listen(8080);
+// --------------------
+
 
 // read file and log contents
 var fs = require('fs');
@@ -100,10 +109,14 @@ file.on('readable', function() {
 		console.log(chunk.toString());
 	}
 });
+// --------------------
+
 
 /*
  * MODULES
  */
+
+
 // custom_hello.js
 var hello = function() {
 	console.log('hello');
@@ -121,6 +134,7 @@ var gb = require('./custom_goodbye');
 
 hello();
 gb.goodbye(); // or require('./custom_goodbye').goodbye();
+// --------------------
 
 
 // my_module.js
@@ -135,6 +149,7 @@ exports.bar = bar;
 var myMod = require('./my_module');
 myMod.foo();
 myMod.bar();
+// --------------------
 
 
 // making HTTP requests
@@ -164,10 +179,14 @@ var makeRequest = require('./make_request');
 
 makeRequest('hello world');
 makeRequest('goodbye world');
+// --------------------
+
 
 /*
  * EXPRESS
  */
+
+
 var express = require('express');
 var app = express();
 
@@ -177,7 +196,6 @@ app.get('/', function(req, res) { // root route
 });
 
 app.listen(8080);
-
 
 // endpoint where user can send in a twitter handle, make a call to twitter, fetch the 10 latest tweets, display back to user
 var request = require('request');
@@ -196,6 +214,7 @@ app.get('/tweets/:username', function(req, res) { // dynamic username
 });
 // >node app.js
 // $curl -s http://localhost:8080/tweets/some_user
+// --------------------
 
 
 // ejs
@@ -225,11 +244,14 @@ app.get('/tweets/:username', function(request, response) { // CHANGED TO REQUEST
 	<% }); %>
 </ul>
 */
+// --------------------
 
 
 /*
  * SOCKET.IO
  */
+
+
  // app.js
 var express = require('express');
 var app = express();
@@ -282,15 +304,16 @@ server.listen(8080); // what exactly is "listen"???
 	});
 </script>
 */
+// --------------------
 
 
  /*
   * PERSISTING DATA
   */
 
-// continuing from the prev example
-// app.js
 
+// continuing from the previous example
+// app.js
 var messages = [];
 
 var storeMessage= function(name, data) {
@@ -315,6 +338,8 @@ io.sockets.on('connection', function(client) { // why io.sockets.on instead of i
 		});
 	});
 });
+// --------------------
+
 
 // redis
 var redis = require('redis');
@@ -331,6 +356,8 @@ var message = 'hello, this is dog';
 client.lpush('messages', message, function(err, reply) {
 	console.log(reply); // reply = messages.length
 });
+// --------------------
+
 
 // revise the earlier example to include redis 
 var storeMessage = function(name, data) {
@@ -350,6 +377,8 @@ client.on('join', function(name) {
 		});
 	});
 });
+// --------------------
+
 
 // current connected users/chatters
 // use a set (unique data)
@@ -362,6 +391,8 @@ client.srem('names', 'cat');
 client.smembers('names', function(err, names) {
 	console.log(names);
 });
+// --------------------
+
 
 // app.js
 client.on('join', function(name) {
@@ -385,11 +416,16 @@ client.on('disconnect', function(name) {
 })
 
 // index.html
-socket.on('add chatter', function(name) {
-	var chatter = $('<li>' + name + '</li>').data('name', name); // jquery
-	$('#chatters').append(chatter);
-});
+/*
+<script>
+	socket.on('add chatter', function(name) {
+		var chatter = $('<li>' + name + '</li>').data('name', name); // jquery
+		$('#chatters').append(chatter);
+	});
 
-socket.on('remove chatter', function(name) {
-	$('#chatters li[data-name=' + name + ']').remove(); // jquery
-});
+	socket.on('remove chatter', function(name) {
+		$('#chatters li[data-name=' + name + ']').remove(); // jquery
+	});
+</script>
+*/
+// --------------------

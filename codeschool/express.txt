@@ -1,0 +1,6 @@
+course covers express 4.9.x
+
+intro
+- express extends node http objects
+- request inherits from http.IncomingMessage
+- response inherits from http.ServerResponse

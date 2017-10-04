@@ -82,6 +82,5 @@ components
 
 	ember generate component <component-name>
 
-
 questions/comments
 - services vs models???
