@@ -1,0 +1,41 @@
+intro
+- node + node libraries = non-blocking (using callbacks)
+- [...]
+
+events
+- request obj inherits from event emitter
+- [...]
+
+streams 
+- request obj = readable stream 
+- response obj = writable stream 
+- request emits "readable" and "end" events 
+	- readable: data ready to be consumed
+	- end: client done sending data
+- streams API unstable --> used pipe when possible
+- stability score (changes to API possible)
+	- file system: 3 - stable
+	- stream: 2 - unstable
+
+modules
+- if no path specified, node will search:
+	- /home/user/my_app/node_modules/whatever.js
+	- /home/user/node_modules/whatever.js
+	- /home/node_modules/whatever.js
+	- /node_modules/whatever.js
+- semantic versioning: 
+	- "some_module" : "2.7.5" --> major.minor.patch
+		- "~2" --> latest ver before 3.0.0 ***dangerous
+		- "~2.7" --> >=2.7.0 <2.8.0 ***api could change
+		- "~2.7.5" --> >=2.7.5 <2.8.0 ***considered safe
+
+express
+- [...]
+
+socket.io
+- traditionally: browser sends request to server --> some time later server responds and browser renders
+- web sockets: connection between client and server
+	- send/receive data in real time
+	- need module/library with intelligent fallbacks in case the web socket doesn't work
+
+persisting data

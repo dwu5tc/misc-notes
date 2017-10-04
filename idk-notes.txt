@@ -19,4 +19,7 @@ https://stackoverflow.com/questions/7727640/differences-among-grep-awk-and-sed
 	
 http://linuxsig.org/files/bash_scripting.html
 	- "" vs '' vs \ vs `` 
+https://www.gnu.org/software/bash/manual/html_node/Variable-Index.html
+https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html
+https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
 	
