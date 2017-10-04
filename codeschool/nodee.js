@@ -74,7 +74,7 @@ file.pipe(newFile);
 
 // file upload with progress report
 http.createServer(function(req, res) {
-	var newFile = fs.createWriteStream("readme_copy.md");
+	var newFile = fs.createWriteStream('readme_copy.md');
 	var fileBytes = req.headers['content-length'];
 	var uploadedBytes = 0;
 
@@ -84,7 +84,7 @@ http.createServer(function(req, res) {
 		while ((chunk = req.read()) !== null) {
 			uploadedBytes += chunk.length;
 			var progress = (uploadedBytes / fileBytes) * 100;
-			res.write("progress: " + parseInt(progress, 10) + "%\n");
+			res.write('progress: ' + parseInt(progress, 10) + '%\n');
 		}
 	});
 	req.pipe(newFile);
@@ -162,8 +162,8 @@ module.exports = makeRequest;
 // app.js
 var makeRequest = require('./make_request');
 
-makeRequest("hello world");
-makeRequest("goodbye world");
+makeRequest('hello world');
+makeRequest('goodbye world');
 
 /*
  * EXPRESS
@@ -260,7 +260,7 @@ server.listen(8080); // what exactly is "listen"???
 
 // index.html (uses jquery)
 /*
-<script src="/socket.io/socket.io.js"></script>
+<script src='/socket.io/socket.io.js'></script>
 
 <script>
 	var server = io.connect('http://localhost:8080'); // socket.io server connection to localhost:8080
@@ -288,4 +288,108 @@ server.listen(8080); // what exactly is "listen"???
   * PERSISTING DATA
   */
 
+// continuing from the prev example
+// app.js
 
+var messages = [];
+
+var storeMessage= function(name, data) {
+	messages.push({ name: name, data: data });
+	if (messages.length > 10) {
+		messages.shift(); // if >10 messages, remove first
+	}
+}
+
+io.sockets.on('connection', function(client) { // why io.sockets.on instead of io.on
+	...
+	client.on('join', function(name) {
+		messages.forEach(function(message) {
+			client.emit('message', message.name + ': ' + message.data);
+		});
+	});
+	client.on('message', function(message) {
+		client.get('nickname', function(error, name) { // how does this function work?
+			client.broadcast.emit('message', name + ': ' + message);
+			client.emit('message', name + ': ' + message);
+			storeMessage(name, message); // store the message
+		});
+	});
+});
+
+// redis
+var redis = require('redis');
+var client = redis.createClient();
+
+client.set('message1', 'hello, yes this is dog'); // (key, value)
+client.set('message2', 'hello, no this is cat');
+
+client.get('message1', function(err, reply) {
+	console.log(reply); // reply = 'hello, yes...''
+});
+
+var message = 'hello, this is dog';
+client.lpush('messages', message, function(err, reply) {
+	console.log(reply); // reply = messages.length
+});
+
+// revise the earlier example to include redis 
+var storeMessage = function(name, data) {
+	var message= JSON.stringify({ name: name, data: data }); // turn obj into string to store into redis
+	redisClient.lpush('messages', message, function(err, response) {
+		redisClient.ltrim('messages', 0, 9); // keep newest 10;
+	});
+}
+
+client.on('join', function(name) {
+	redisClient.lrange('messages', 0, -1 , function(err, messages) {
+		messages = messages.reverse(); // reverse so emitted in correct order
+
+		messages.forEach(function(message) {
+			message = JSON.parse(message); // parse into JSON obj
+			client.emit('message', message.name + ': ' + messag.data);
+		});
+	});
+});
+
+// current connected users/chatters
+// use a set (unique data)
+client.sadd('names', 'dog');
+client.sadd('names', 'cat');
+client.sadd('names', 'tiger');
+
+client.srem('names', 'cat');
+
+client.smembers('names', function(err, names) {
+	console.log(names);
+});
+
+// app.js
+client.on('join', function(name) {
+	client.broadcast.emit('add chatter', name);
+
+	redisClient.smembers('names', function(err, names) {
+		names.forEach(function(name) {
+			client.emit('add chatter', name);
+		}); // emit all current chatters to the newly connected client
+	});
+
+	redisClient.sadd('chatters', name)
+});
+
+client.on('disconnect', function(name) {
+	client.get('nickname', function(err, name) {
+		client.broadcast.emit('remove chatter', name);
+
+		redis.srem('chatters', name);
+	})
+})
+
+// index.html
+socket.on('add chatter', function(name) {
+	var chatter = $('<li>' + name + '</li>').data('name', name); // jquery
+	$('#chatters').append(chatter);
+});
+
+socket.on('remove chatter', function(name) {
+	$('#chatters li[data-name=' + name + ']').remove(); // jquery
+});

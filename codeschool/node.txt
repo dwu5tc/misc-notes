@@ -39,3 +39,5 @@ socket.io
 	- need module/library with intelligent fallbacks in case the web socket doesn't work
 
 persisting data
+- redis
+	- check the redis.txt
