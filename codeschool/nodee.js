@@ -238,22 +238,17 @@ var io = require('socket.io')(server);
 // socket.io and express are now sharing the same http server
 
 // listen for connection events
-io.on('connection', function(client) {
-	console.log('client connected');
-
-	client.emit('messages', { hello: 'world' });
+io.on('connection', function(client) { // client = client obj that has connected
+	// client.emit('message', { hello: 'world' }); // early example
 
 	client.on('join', function(name) {
 		client.nickname = name;
 	});
 
-	client.on('messages', function(data) {
+	client.on('message', function(message) {
 		var nickname = client.nickname;
-		// console.log(data);
+		client.emit('message', nickname + ': ' + message);
 		client.broadcast.emit('message', nickname + ': ' + message); // broadcast message to all other clients connected
-		// should 'message' be 'messages'???
-		// should message be dat?afa??
-		client.emit('messages', nickname + ': ' + message); // ???
 	});
 });
 
@@ -261,25 +256,29 @@ app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
-server.listen(8080);
+server.listen(8080); // what exactly is "listen"???
 
 // index.html (uses jquery)
 /*
 <script src="/socket.io/socket.io.js"></script>
+
 <script>
-	var socket = io.connect(http://localhost:8080);
-	socket.on('connect', function(data) {
+	var server = io.connect('http://localhost:8080'); // socket.io server connection to localhost:8080
+
+	server.on('connect', function() { // why 'connect' and not 'connection'???
 		$('#status').html('connected to chattr'); 
 		nickname = prompt('what is your nickname'); // user enters nickname
-		socket.emit('join', nickname); 
+		server.emit('join', nickname); 
 	})
+
 	$('#chat_form').submit(function(e) { 
 		var message = $('#chat_input').val();
-		socket.emit('messages', message);
+		server.emit('message', message);
 	})
-	socket.on('messages', function(data) {
-		// alert(data.hello);
-		insertMessage(data); // pretend this is a working function
+
+	server.on('message', function(message) {
+		// alert(message.hello); // early example
+		insertMessage(message); // pretend this is a working function which inserts the message into the chatroom
 	});
 </script>
 */
