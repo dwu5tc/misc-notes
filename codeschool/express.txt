@@ -4,3 +4,34 @@ intro
 - express extends node http objects
 - request inherits from http.IncomingMessage
 - response inherits from http.ServerResponse
+
+middleware
+- functions executed sequentially that access request and response
+- e.g validation, authentication, data parsing
+- express app = essentially a stack of MW running one after another
+	- requests start at the first MW and work their way down the stack
+
+		- client --> 
+
+		app.use(function(req,res, next) { // middleware A (beginning of express???)
+			...
+			next(); 
+		});
+		
+		--> (moves to the next middleware in the stack)
+		
+		...next(); // middleware B
+		
+		-->
+		
+		...next(); // middleware C
+		
+		--> --> -->
+		
+		app.use(function(req, res, next) { // middleware N completes the request
+			...
+			response.send('done');
+		});
+
+		--> client
+- node module system follows the commonjs specification

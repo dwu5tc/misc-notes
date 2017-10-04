@@ -120,13 +120,13 @@ file.on('readable', function() {
 // custom_hello.js
 var hello = function() {
 	console.log('hello');
-}
+};
 module.exports = hello;
 
 // custom_goodbye.js
 exports.goodbye = function() {
 	console.log('bye');
-}
+};
 
 // app.js
 var hello = require('./custom_hello');
@@ -138,9 +138,9 @@ gb.goodbye(); // or require('./custom_goodbye').goodbye();
 
 
 // my_module.js
-var foo = function() {...}
-var bar = function() {...}
-var baz = function() {...}
+var foo = function() {...};
+var bar = function() {...};
+var baz = function() {...};
 
 exports.foo = foo;
 exports.bar = bar;
@@ -168,7 +168,7 @@ var makeRequest = function(message) {
 	});
 	request.write(message); // begins req
 	request.end();
-}
+};
 
 makeRequest('hello world');
 
@@ -316,12 +316,12 @@ server.listen(8080); // what exactly is "listen"???
 // app.js
 var messages = [];
 
-var storeMessage= function(name, data) {
+var storeMessage = function(name, data) {
 	messages.push({ name: name, data: data });
 	if (messages.length > 10) {
 		messages.shift(); // if >10 messages, remove first
 	}
-}
+};
 
 io.sockets.on('connection', function(client) { // why io.sockets.on instead of io.on
 	...
@@ -365,7 +365,7 @@ var storeMessage = function(name, data) {
 	redisClient.lpush('messages', message, function(err, response) {
 		redisClient.ltrim('messages', 0, 9); // keep newest 10;
 	});
-}
+};
 
 client.on('join', function(name) {
 	redisClient.lrange('messages', 0, -1 , function(err, messages) {
@@ -413,7 +413,7 @@ client.on('disconnect', function(name) {
 
 		redis.srem('chatters', name);
 	})
-})
+});
 
 // index.html
 /*
