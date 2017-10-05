@@ -265,7 +265,7 @@ app.param('name', function(req, res, next) {
 	var name = req.params.name;
 	var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
 
-	req.blockName = block; // req.blockName can be accessed from other routes in the app // why is this useful???
+	req.blockName = block; // req.blockName can be accessed from other routes in the app 
 	next();
 });
 ...
