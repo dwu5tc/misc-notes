@@ -206,7 +206,7 @@ module.exports = function(req, res, next) {
 
 
 // query string parameters (from url)
-app.get('blocks' function(req, res) {
+app.get('/blocks' function(req, res) {
 	...
 	if (req.query.limit >= 0) {
 		res.json(blocks.slice(0, req.query.limit));
@@ -228,6 +228,8 @@ var blocks = {
 	'movable': 'can be moved',
 	'rotating': 'circular motion'
 };
+// res.json(Object.keys(blocks)); 
+// returns the keys
 
 app.get('/blocks/:name', function(req, res) {
 	var desc = blocks[request.params.name];
@@ -247,6 +249,36 @@ if (!desc) {
 ...
 
 
+// normalizing the request parameter
+...
+var name = req.params.name;
+var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+var desc = blocks[block];
+if (!desc) {...}
+...
+
+
+// app.param function maps placeholders to callback functions
+// useful for running pre-conditions on dynamic routes
+...
+app.param('name', function(req, res, next) {
+	var name = req.params.name;
+	var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+
+	req.blockName = block; // req.blockName can be accessed from other routes in the app // why is this useful???
+	next();
+});
+...
+...
+app.get('/blocks/:name', function(req, res) {
+	var desc = blocks[req.blockName];
+});
+...
+...
+app.get('locations/:name', function(req, res) {
+	var location = locations[req.blockName];
+});
+...
 
 /*
  * BODY PARSER
