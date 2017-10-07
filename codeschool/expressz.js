@@ -280,12 +280,174 @@ app.get('locations/:name', function(req, res) {
 });
 ...
 
+
 /*
  * BODY PARSER
  */
 
 
+// post requests
 
- /*
-  * REFACTORING ROUTES
-  */
+// app.js
+// public/
+// 	  index.html
+// 	  client.js
+// 	  style.css
+// 	  stars.png
+
+// index.html
+/*
+...
+<form>
+	<legend>new block</legend>
+	x<input name="name" placeholder="name">
+	<input name="description" placeholder="description">
+	<input type="submit">
+</form>
+...
+*/
+
+// client.js
+$(function() {
+	$.get('/blocks', appendToList);
+	...
+	$('form').on('submit', function(e) {
+		e.preventDefault();
+		var form = $(this);
+		var blockData = form.serialize(); // transforms form data to URL-encoded notation so express app can parse it back into javascript
+
+		$.ajax({
+			type: 'POST',
+			url: '/blocks',
+			data: blockData
+		}).done(function(blockName) {
+			appendToList([blockName]); // appendToList expects an array, so wrap argument in an array
+			form.trigger('reset'); // cleans up form text input fields
+		});
+	});
+	...
+	function appendToList(blocks) {
+		var list = [];
+		var content, block;
+		for (var i in blocks) {
+			blocks = blocks[i];
+			content = '<a href="/blocks/' + block + '">' + block + '</a>';
+			list.push($('<li>', { html: content })); // what does this do???
+		}
+		$('.block-list').append(list);
+	}
+});
+
+// app.js
+var express = require('express');
+var app = express();
+
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false }); // forces the use of nodes native query parser module (querystring)
+// return value = middleware function stored into the urlencodedParser variable
+
+var blocks = {...};
+
+// urlencodedParser MW function runs first, then the anonymous function
+app.post('/blocks', urlencodedParser, function(req, res) { // routes can take multiple handlers as arguments and will call them sequentially
+	var newBlock = req.body; // form submitted data can be accessed through req.body
+	blocks[newBlock.name] = newBlock.description;
+
+	res.status(201).json(newBlock.name); // 201 = created status code
+});
+// using multiple route handlers is useful for re-using MW that do things like load resources, perform validations, authentications, etc.
+// --------------------
+
+
+// delete requests
+
+// client.js
+$(function() {
+	...
+	function appendToList(blocks) {
+		...
+		// content = '<a href="/blocks/' + block + '">' + block + '</a>';
+		content = '<a href="/blocks/' + block + '">' + block + '</a>' +
+		'<a href="#" data-block"' + block + '"><img src="del.jpg"></a>'; // add del.jpg to the public/ folder
+		...
+	}
+	...
+	$('.block-list').on('click', 'a[data-block]', function(e) {
+		if (!confirm('are you sure?')) { // if user clicks cancel --> return false --> stop execution of event handler
+			return false;
+		}
+
+		var target = $(e.currentTarget); // get link that triggered the event --> wrap in jquery obj for easier work with
+
+		$.ajax({
+			type: 'DELETE',
+			url: '/blocks/' + target.data('block')
+		}).done(function() {
+			target.parent('li').remove();
+		});
+	});
+	...
+});
+
+// app.js
+app.delete('/blocks/:name', function(req, res) {
+	delete blocks[req.blockName]; // blockName is set in app.param('name', ...
+	res.sendStatus(200); // sendStatus will set the response body to "OK"
+});
+// --------------------
+
+
+/*
+ * REFACTORING ROUTES
+ */
+
+
+// route instances
+// handling repetition in route names
+// e.g 
+	// get('blocks'), get('blocks/:name'), post('blocks'), delete('/blocks/:name')
+
+// app.js
+...
+var blocksRoute = app.route('blocks'); // returns route obj which handles all requests to /blocks path
+blocksRoute.get(function(req, res) {
+	...
+});
+blocksRoute.post(urlencodedParser, function(req, res) {
+	...
+});
+...
+
+
+// even better
+// chaining functions: eliminate intermediate variables and keep code more readable
+// commonly found in express apps
+..
+app.route('blocks')
+	.get(function(req, res) {
+		...
+	})
+	.post(urlencodedParser, function(req, res) {
+		...
+	});
+app.route('blocks/:name')
+	.get(function(req, res) {
+		...
+	})
+	.delete(function(req, res) {
+		...
+	});
+...
+
+
+// route files
+// extract routes to modules --> cleaner and more maintainable
+var express = require('express');
+var app = express();
+
+app.use(express.static('public'));
+
+var blocks = require('./routes/blocks');
+app.use('/blocks, blocks');
+
+app.listen(3000);

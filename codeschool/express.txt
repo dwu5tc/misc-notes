@@ -35,3 +35,8 @@ middleware
 
 		--> client
 - node module system follows the commonjs specification
+
+- parsing form data requires middleware not shipped with express
+	
+	npm install body-parser
+	

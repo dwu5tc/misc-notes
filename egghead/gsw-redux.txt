@@ -1,0 +1,31 @@
+pure functions
+- return values depend only on the values of the arguments
+- no side-effects
+- predictable
+- does not mutate arguments
+
+impure functions
+- may call database or network
+- side-effects
+- may mutate the arguments that were passed
+
+- view layer most predictable when described as a pure function of the applications state [what???]
+- state mutations in app are described as a pure funct that takes prev state + action dispatched --> returns next state (called REDUCER)
+	- one function [???]
+- important to NOT modify the state given to it
+- fast: can keep references to properties which do not change
+
+- store binds together the 3 principles of redux
+	- holds the current app state obj
+	- can dispatch actions
+	- upon creation, must specify the reducer that tells how state is updated with actions
+	- has 3 important methods:
+		- getState() --> retrieves the current state of the redux store
+		- dispatch() --> dispatch actions which change state of app
+		- subscribe() --> register callback that the redux store will call anytime anytime an action has been dispatches
+
+
+- reducer: 
+	- one particular func takes state of WHOLE app + action being dispatched --> returns the next state of the WHOLE app // redundant?
+	- important not to modify the state given to it --> pure/return new obj
+- 
