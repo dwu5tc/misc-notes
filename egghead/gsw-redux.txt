@@ -24,8 +24,12 @@ impure functions
 		- dispatch() --> dispatch actions which change state of app
 		- subscribe() --> register callback that the redux store will call anytime anytime an action has been dispatches
 
-
 - reducer: 
 	- one particular func takes state of WHOLE app + action being dispatched --> returns the next state of the WHOLE app // redundant?
 	- important not to modify the state given to it --> pure/return new obj
-- 
+
+- context (not stable)
+- <provider>
+- mapStateToProps and mapDispatchToProps
+- connect
+- action creators
