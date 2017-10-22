@@ -9,11 +9,11 @@ impure functions
 - side-effects
 - may mutate the arguments that were passed
 
-- view layer most predictable when described as a pure function of the applications state [what???]
-- state mutations in app are described as a pure funct that takes prev state + action dispatched --> returns next state (called REDUCER)
-	- one function [???]
-- important to NOT modify the state given to it
-- fast: can keep references to properties which do not change
+- view layer most predictable when described as a pure function of the application's state [what???]
+- state mutations are described as a pure funcs that take prev state + action dispatched --> return next state (called REDUCER)
+	- one function (root reducer) composed of many (reducers); reducer composition
+- important to NOT modify the original state
+- redux = fast by keeping references to properties which do not change
 
 - store binds together the 3 principles of redux
 	- holds the current app state obj
@@ -24,12 +24,20 @@ impure functions
 		- dispatch() --> dispatch actions which change state of app
 		- subscribe() --> register callback that the redux store will call anytime anytime an action has been dispatches
 
-- reducer: 
-	- one particular func takes state of WHOLE app + action being dispatched --> returns the next state of the WHOLE app // redundant?
-	- important not to modify the state given to it --> pure/return new obj
+reducer: 
+- takes state of app + action being dispatched --> returns the next state of the app
+- important not to modify the state given to it --> pure/return new obj
 
 - context (not stable)
 - <provider>
 - mapStateToProps and mapDispatchToProps
 - connect
 - action creators
+
+// redux documentation //
+http://redux.js.org/
+
+// examples //
+http://redux.js.org/docs/basics/ExampleTodoList.html
+
+

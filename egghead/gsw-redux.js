@@ -1,3 +1,5 @@
+// jshint ignore: start
+
 // counter example
 function counter(state, action) {
 	if (typeof state === 'undefined') { // if reducer receives undefined, must return what is considered the "initial state"
@@ -17,7 +19,7 @@ function counter(state, action) {
 
 
 // counter example with cosmetic tweaks
-const counter(state = 0, action) => { // if state === undefined, state = 0 (ES6 default param vals) 
+const counter = (state = 0, action) => { // if state === undefined, state = 0 (ES6 default param vals) 
 	switch (action.type) {
 		case 'INCREMENT':
 			return state + 1;
@@ -28,7 +30,7 @@ const counter(state = 0, action) => { // if state === undefined, state = 0 (ES6 
 	}
 };
 
-const { createStore } = Redux; // (ES6 ???!!!)
+const { createStore } = Redux; // (ES6 ???)
 // var createStore = Redux.createStore; // same
 // import { createStore } from 'redux'; // same
 const store = createStore(counter); // counter = the reducer which manages state updates
@@ -119,10 +121,11 @@ const incrementCounter = (list, index) => {
 
 // todo example
 const toggleTodo = (todo) => {
-	return Object.assign({}, todo, {	// assigning of enumerable (shallow copies) props into {} (ES6 obj prop assignment)
+	return Object.assign({}, todo, { // assigning of enumerable (shallow copies) props into {} (ES6 obj prop assignment)
 		completed: !todo.completed
 	});
 };
+// but even better = using ... (ES6 spread)
 
 
 // reducer for todos
@@ -152,9 +155,8 @@ const todos = (state = [], action) => {
 	}
 };
 
-// more readable
+// more readable implementation below
 // reducer composition
-// single top-level reducer with other reducers???
 const todo = (state, action) => { // handles a single todo
 	switch (action.type) {
 		case 'ADD_TODO':
@@ -211,7 +213,7 @@ const todoApp = (state = {}, action) => {
 		visibilityFilter: visibilityFilter(state.visibilityFilter, action)
 	};
 };
-// is this the top-level reducer??? yes
+// top-level reducer 
 
 // same as below
 const { combineReducers } = Redux;
@@ -247,7 +249,7 @@ const combineReducers = (reducers) => { //
 // implementation of view layer
 const { Component } = React;
 
-const FilterLink = ({ filter, currentFilter, children }) => { // children!!!???
+const FilterLink = ({ filter, currentFilter, children }) => { // children???
 	if (filter === currentFilter) {
 		return <span>{children}</span>; // not clickable
 	}
@@ -288,16 +290,16 @@ class TodoApp extends Component {
 		const visibleTodos = getVisibleTodos(todos, visibilityFilter);
 		return (
 			<div>
-				<input ref={node => // wtf!!!???
+				<input ref={node => // ???
 					this.input = node;
 				}} />
 				<button onClick={() => {
 					store.dispatch({
 						type: 'ADD_TODO',
-						text: this.input.value, // wtf!!!???
+						text: this.input.value, // ???
 						id: nextTodoId++
 					});
-					this.input.value ='';// wtf!!!???
+					this.input.value =''; // ???
 				}}>
 				Add Todo 
 				</button> 
@@ -361,4 +363,4 @@ render();
 // ***REVIEW DATA FLOW --> 21. Extracting Presentation Components (AddTodo, Footer, FilterLink) -- 4:10
 // https://egghead.io/lessons/react-redux-extracting-presentational-components-addtodo-footer-filterlink
 
-const { store } = props // how does this work???!!!
+const { store } = props // how does this work???
