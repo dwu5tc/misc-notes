@@ -130,7 +130,7 @@ const Todo = ({ onClick, completed, text }) => (
 	</li>
 );
 
-const TodoList = ({ todos, onTodoClick}) => (
+const TodoList = ({ todos, onTodoClick }) => (
 	<ul>
 		{todos.map(todo =>
 			<Todo
