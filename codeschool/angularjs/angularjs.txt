@@ -30,7 +30,6 @@
 - organizing modules:
 	- app.js = top-level module attached via ng-app
 	- products.js = all the functionality for products and ONLY products
-	
 
 
 - dont really understand product specs
