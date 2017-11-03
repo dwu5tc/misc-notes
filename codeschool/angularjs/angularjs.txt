@@ -1,0 +1,36 @@
+- directives for binding behavior
+
+- wrap JS in closure = good habit
+
+- directives: HTML annotations that trigger JS behaviors
+- modules: where our app components live
+- controllers: where we add app behaviour
+- expression: how values get displayed within the page
+
+- angular has many filters
+	- time
+	- uppercase & lowercase
+	- currency
+	- limitTo
+	- orderBy
+
+- ng-model binds the form element val to the prop
+
+- custom-directives
+	- element directives for UI widgets 
+	- attribute directives for mixin behaviors 
+		e.g <h3 product-title></h3>
+
+		app.directive('productTitle', function() {
+			...
+			restrict: 'A',
+			...
+		});
+
+- organizing modules:
+	- app.js = top-level module attached via ng-app
+	- products.js = all the functionality for products and ONLY products
+	
+
+
+- dont really understand product specs
