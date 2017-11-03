@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="store">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+</head>
+<body ng-controller="StoreController as store">
+	<ul class="list-group">
+		<li class="list-group-item" ng-repeat="product in store.products">
+			<!-- <h3 ng-include="'product-title.html'"></h3> -->
+			<product-title></product-title>
+			<img ng-src="{{product.images[0].full}}"> <!-- src with angular throw error; 
+			browser tries to load before expression evals-->
+		</li>
+	</ul>
+	
+
+	<!-- ng-class e.g
+		if (tab === 3) set class to "active", otherwise nothing -->
+	<!-- THIS IS NOT GOOD... TOO MUCH LOGIC IN HTML... MOVE TO A CONTROLLER
+	<section ng-init="tab = 1">
+		<ul class="nav nav-pills">
+			<li><a href="" ng-click="tab = 1"></a></li>
+			<li><a href="" ng-click="tab = 2"></a></li>
+			<li><a href="" ng-click="tab = 3"></a></li>
+		</ul>
+		<ul class="panel" ng-show="tab === 1">
+			<h4>Description</h4>
+			<p>{{product.description</p>
+		</ul>
+		<ul class="panel" ng-show="tab === 2">
+			<h4>Specifications</h4>
+			<blockquote>None yet</blockquote>
+		</ul>
+		<ul class="panel" ng-show="tab === 3">
+			<h4>Reviews</h4>
+			<blockquote>None yet</blockquote>
+		</ul>
+	</section>
+	-->
+
+	<section ng-init="tab = 1" ng-controller="PanelController as panel">
+		<ul class="nav nav-pills">
+			<li ng-class="{ active:panel.isSelected(1) }">
+				<a href="" ng-click="panel.selectTab(1)"></a>
+			</li>
+			<li ng-class="{ active:panel.isSelected(2) }">
+				<a href="" ng-click="panel.selectTab(2)"></a>
+			</li>
+			<li ng-class="{ active:panel.isSelected(3) }">
+				<a href="" ng-click="panel.selectTab(3)"></a>
+			</li>
+		</ul>
+
+		<ul class="panel" ng-show="panel.isSelected(1)">
+			<h4>Description</h4>
+			<p>{{product.description</p>
+		</ul>
+
+		<ul class="panel" ng-show="panel.isSelected(2)"
+			<h4>Specifications</h4>
+			<blockquote>None yet</blockquote>
+		</ul>
+
+		<ul class="panel" ng-show="panel.isSelected(3)"
+			<h4>Reviews</h4>
+			<blockquote ng-repeat="review in product.reviews"> 
+				<b>Stars: {{review.stars}}</b>
+				{{review.body}}
+				<cite>By: {{review.author}}</cite>
+			</blockquote>
+
+			<form name="reviewForm" ng-controller="ReviewController as reviewCtrl"
+									ng-submit="reviewForm.$valid && ReviewCtrl.addReview(product)" novalidate> 
+									<!-- turn off default HTML validations -->
+				<blockquote>
+					<b>Stars: {{reviewCtrl.review.stars}}</b>
+					{{reviewCtrl.review.body}}
+					<cite>By: {{reviewCtrl.review.author}}</cite>
+				</blockquote>
+				<select ng-model="reviewCtrl.review.stars" required>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
+				<textarea ng-model="reviewCtrl.review.body" required></textarea>
+				<label>By:</label>
+				<input type="email" ng-model="reviewCtrl.review.author" required>
+				<!-- <div>reviewForm is {{reivewForm.$valid}}</div> -->
+				<input type="submit" value="Submit">
+			</form>
+		</ul>
+	</section>
+
+	<script type="text/javascript" src="angular.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+</body>
+</html>
