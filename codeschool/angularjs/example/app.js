@@ -1,11 +1,18 @@
  
 
 (function() {
-	var app = angular.module('store', []);
+	var app = angular.module('store', ['store-products']);
 
-	app.controller('StoreController', function() {
-		this.product = gem;
-	});
+	app.controller('StoreController', [ '$http', function($http) {
+		//this.product = gem;
+		var store = this;
+
+		store.products = [];
+
+		$http.get('/products.json').success(function(data) {
+			store.products = data; // can't just do this.products
+		});
+	}]);
 
 	app.controller('PanelController', function() {
 		this.tab = 1;
@@ -16,7 +23,7 @@
 
 		this.isSelected = function(checkTab) {
 			return this.tab === checkTab;
-		}
+		};
 	});
 
 	app.controller('ReviewController', function() {
@@ -27,13 +34,6 @@
 			this.preview = {};
 		};
 	});
-
-	app.directive('productTitle', function() { // dashes in HTML translate to camel case in JS
-		return {
-			restrict: 'E', // E = element
-			templateUrl: 'product-title.html'
-		};
-	};
 
 	var gems = [
 	{
@@ -59,6 +59,5 @@
 		description: '...',
 		canPurchase: false,
 		soldOut: true
-	}
-	];
+	}];
 })();
