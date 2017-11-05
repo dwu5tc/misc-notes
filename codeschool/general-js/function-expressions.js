@@ -2,10 +2,10 @@
 // ...
 // ... immediately invoked functions...
 
+// closures...
+// [...]
 
-// closures
 var subPassengers = ['Luke', 'Leia', 'Han', 'Chewie', 'Yoda', 'R2D2'];
-
 // doesn't work --> alerts 6
 function assignTorpedo(name, passengerArray) {
 	var torpedoAssignment;

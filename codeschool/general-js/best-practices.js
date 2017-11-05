@@ -77,7 +77,40 @@ var elapsedTime = endTime - startTime;
 // typeof NaN is a number and thus second part is necessary 
 
 // namespacing 
+// capitalization by convention
+var FOO = {
+	// code here
+};
 
+// anonymous closures
+var ARMORY = (function() {
+	var weaponList = []; // invisible
+	var armostList = [];
+
+	var removeWeapon = function() {}; // invisible
+	var replaceWeapon = function() {};
+	var removeArmor = function() {};
+	var replaceArmor = function() {};
+
+	return {
+		makeWeaponRequest: function() {}, // visible
+		makeArmorRequest: function() {}
+	};
+})();
+
+// global imports
+var wartime = true;
+var ARMORY = (function(war) {
+	// code here
+})(wartime);
+
+// augmentation 
+// http://campus.codeschool.com/courses/javascript-best-practices/level/4/section/4/video/1
+ARMORY = (function(oldNamespace) {
+	// code here
+	return oldNamespace;
+	// new properties will not have access to the private data from the previous closure***
+})(ARMORY);
 
 
 
