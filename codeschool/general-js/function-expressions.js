@@ -4,6 +4,7 @@
 
 // closures...
 // [...]
+// https://stackoverflow.com/questions/111102/how-do-javascript-closures-work
 
 var subPassengers = ['Luke', 'Leia', 'Han', 'Chewie', 'Yoda', 'R2D2'];
 // doesn't work --> alerts 6
