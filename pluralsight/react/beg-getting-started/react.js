@@ -68,7 +68,7 @@ class Button extends React.Component {
 }
 
 // better!!!
-class BUtton extends React.Component {
+class Button extends React.Component {
 	handleClick = () => {
 		this.setState((prevState) => ({
 			counter: prevState.counter + 1
@@ -185,17 +185,17 @@ ReactDOM.render(<Card />, mountNode);
  *	BUILDING A GAME
  */
 
+// bit.ly/psreact15
 const Stars = (props) => {
 	// needed to move this up one level because
 	// this component would get re-rendered (with a new random numberOfStars)
 	// every time we selected a new number 
-	// const numberOfStars = 1 + Math.floor(Math.random()*9);
+	// const numberOfStars = Game.randomNumber();
 
 	// let stars = [];
 	// for (let i = 0; i < numberOfStars; i++) {
 	// 	stars.push(<i key={i} className="fa fa-star"></i>);
 	// }
-
 	return (
 		<div>
 			{_.range(props.numberOfStars).map(i =>
@@ -207,10 +207,12 @@ const Stars = (props) => {
 
 const Button = (props) => {
 	let button;
-	switch(props.answerIsCorrect) {
+	switch(props.answerIsCorrect){
 		case true:
 			button = 
-				<button className="btn btn-success">
+				<button className="btn btn-success"
+						onClick={props.acceptAnswer}
+				>
 					<i className="fa fa-check"></i>
 				</button>
 			break;
@@ -226,13 +228,19 @@ const Button = (props) => {
 					disabled={props.selectedNumbers.length === 0}
 				>
 					=
-				</button>;
+				</button>
 			break;
 	}
 
 	return (
 		<div>
 			{button}
+			<button className="btn btn-warning"
+				onClick={props.redraw}
+				disabled={props.redraws === 0}
+			>
+				<i className="fa fa-refresh"></i> {props.redraws}
+			</button>
 		</div>
 	);
 }
@@ -251,14 +259,12 @@ const Answer = (props) => {
 	);
 }
 
-// all funcs are objs so you can store data
-// do this when the var will be shared exactly as is by all instances of the component
-// and not related to any logic inside the component 
-Numbers.list = _.range(1, 10); // with lodash
-
 const Numbers = (props) => {
 	// const arrayOfNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-	const numberClassName = (numer) => {
+	const numberClassName = (number) => {
+		if (props.usedNumbers.indexOf(number) >= 0 ) {
+			return 'used';
+		}
 		if (props.selectedNumbers.indexOf(number) >= 0) {
 			return 'selected';
 		}
@@ -270,7 +276,7 @@ const Numbers = (props) => {
 		<div>
 			{Numbers.list.map((number, i) => 
 				<span key={i} 
-					className={this.numberClassName(number)}
+					className={numberClassName(number)}
 					onClick={() => props.selectNumber(number)}
 				>
 					{number}
@@ -280,16 +286,39 @@ const Numbers = (props) => {
 	);
 }
 
+// all funcs are objs so you can store data
+// do this when the var will be shared exactly as is by all instances of the component
+// and not related to any logic inside the component 
+Numbers.list = _.range(1, 10); // with lodash
+
+const DoneFrame = (props) => {
+	return (
+		<div>
+			<h2>{props.doneStatus}</h2>
+			<button
+				onClick={props.resetGame}
+			>Play Again</button>
+		</div>
+	);
+}
+
 class Game extends React.Component {
+	static randomNumber = () => 1 + Math.floor(Math.random() * 9); // what is static???
 	// selectedNumbers is an array here (simplicity) but...
 	// objects are faster than arrays for lookup
-	state = {
+	
+	static initialState = () => ({
 		selectedNumbers: [],
-		randomNumberOfStars: 1 + Math.floor(Math.random()*9),
+		randomNumberOfStars: Game.randomNumber(),
 		usedNumbers: [],
 		answerIsCorrect: null, // would be better to define answerState here instead of null for logic
+		redraws: 5,
+		doneStatus: null
+	});
+	
+	state = Game.initialState();
 
-	};
+	resetGame = () => this.setState(Game.initialState());
 
 	selectNumber = (clickedNumber) => {
 		if (this.state.selectedNumbers.indexOf(clickedNumber) >= 0) { return; }
@@ -303,7 +332,7 @@ class Game extends React.Component {
 		this.setState(prevState => ({
 			answerIsCorrect: null,
 			selectedNumbers: prevState.selectedNumbers
-									.filter(number => number !== clickedNumber);
+									.filter(number => number !== clickedNumber)
 		}));
 	};
 
@@ -317,15 +346,55 @@ class Game extends React.Component {
 	};
 
 	acceptAnswer = () => {
+		this.setState(prevState => ({
+			usedNumbers: prevState.usedNumbers.concat(prevState.selectedNumbers),
+			selectedNumbers: [],
+			answerIsCorrect: null,
+			randomNumberOfStars: Game.randomNumber()
+		}), this.updateDoneStatus); // will run after setState finishes
+		// setState = asynchronous
+		// no guarantee that 2 setStates will happen sequentially
+		// ***so this.updateDoneStatus must be called this way
+	};
 
+	redraw = () => {
+		if (this.state.redraws === 0 ) { return; }
+		this.setState(prevState => ({
+			randomNumberOfStars: Game.randomNumber(),
+			answerIsCorrect: null,
+			selectedNumbers: [],
+			redraws: prevState.redraws - 1
+		}), this.updateDoneStatus);
+	};
+
+	possibleSolutions = ({ randomNumberOfStars, usedNumbers }) => { // destructure from state b/c don't need everything
+		const possibleNumbers = _.range(1, 10).filter(number => 
+			usedNumbers.indexOf(number) === -1
+		);
+
+		return possibleCominbationSum(possibleNumbers, randomNumberOfStars); // pretend this function works
+		// what is << operator
+	};
+
+	updateDoneStatus = () => {
+		this.setState(prevState => {
+			if (prevState.usedNumbers.length === 9) {
+				return { doneStatus: 'Done. Nice!' };
+			}
+			if (prevState.redraws === 0 && !this.possibleSolutions(prevState)) {
+				return { doneStatus: 'Game Over!' };
+			}
+		});
 	};
 
 	render() {
 		const { 
 			selectedNumbers, 
-			randomNumerOfStars,
+			randomNumberOfStars,
 			usedNumbers, 
-			answerIsCorrect 
+			answerIsCorrect,
+			redraws,
+			doneStatus
 		} = this.state;
 		return (
 			<div>
@@ -336,17 +405,27 @@ class Game extends React.Component {
 				<Button 
 					selectedNumbers={selectedNumbers}
 					checkAnswer={this.checkAnswer}
-					answerIsCorrect={answerisCorrect}
+					answerIsCorrect={answerIsCorrect}
+					acceptAnswer={this.acceptAnswer}
+					redraw={this.redraw}
+					redraws={redraws}
 				/>
 				<Answer 
 					selectedNumbers={selectedNumbers}
-					unselectNumer={this.unselectNumber} 
+					unselectNumber={this.unselectNumber} 
 				/>
-				<Numbers 
-					selectedNumbers={selectedNumbers}
-					selectNumber={this.selectNumber} 
-					userNumbers={userNumbers}
-				/>
+				{doneStatus ? 
+					<DoneFrame
+						doneStatus={doneStatus} 
+					/>
+					: 
+					<Numbers 
+						selectedNumbers={selectedNumbers}
+						selectNumber={this.selectNumber} 
+						usedNumbers={usedNumbers}
+					/>
+				}
+				
 			</div>
 		);
 	}
