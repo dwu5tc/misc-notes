@@ -1,0 +1,125 @@
+--------------------
+INTRODUCTION
+--------------------
+
+- database --> table --> rows/columns --> cells
+
+- e.g
+	- id / title / genre / duration
+
+	- 1 / 22 jump street / comedy / 120
+	- 2 / inception / sci-fi / 180
+	- 3 / definitely, maybe / rom-com / 90
+	- ...
+- sometimes unique identifier (id) = primary key
+
+- search by column (left to right) --> then by row (top to bottom)
+- generally fewer rows than columns
+
+--------------------
+SQL LANGUAGE
+--------------------
+
+- programming language that allows interaction with db
+
+- SELECT
+	SELECT title
+	FROM movies;
+
+	SELECT id, title, genre duration
+	FROM movies;
+
+	SELECT *
+	FROM movies;
+
+	SELECT title
+	FROM movies
+	WHERE id = 2;
+
+	SELECT *
+	FROM movies
+	WHERE title = 'inception';
+
+- ORDER BY for sorting (defaults to ascending)
+	SELECT title
+	FROM movies
+	ORDER BY duration DESC;
+
+	SELECT *
+	FROM movies
+	WHERE duration > 100;
+
+- >, <, >=, <=
+- <> not equal to
+
+- AND operator
+	SELECT title
+	FROM movies
+	WHERE id = 1
+	AND genre = 'comedy';
+
+- OR operator
+	SELECT title
+	FROM movies
+	WHERE id = 1
+	OR genre = 'comedy';
+
+--------------------
+ADDING DATA
+--------------------
+
+- INSERT
+	INSERT INTO movies (id, title, genre, duration)
+	VALUES (5, 'your name', 'drama', 120);
+
+	OR quicker method
+
+	INSERT INTO movies
+	VALUES (5, 'your name', 'drama', 120);
+
+	INSERT INTO movies (title, duration)
+	VALUES ('your name', 120);
+
+- NULL value represents fields with missing data or acts as placeholders for unknown data 
+
+- SQL can automatically increment the primary key for a table for new rows
+
+--------------------
+CHANGING CURRENT DATA
+--------------------
+
+- UPDATE
+	UPDATE movies
+	SET genre = 'romance', duration = 90
+	WHERE id = 5;
+
+	UPDATE movies
+	SET genre = 'romance'
+	WHERE id = 3 OR id = 5;
+
+--------------------
+REMOVING DATA
+--------------------
+
+- DELETE
+	DELETE FROM movies WHERE id = 5;
+
+	DELETE FROM movies (***would delete everything!!!)
+
+	DELETE FROM movies WHERE duration < 120;
+
+--------------------
+ADDING DATA
+--------------------
+
+--------------------
+ADDING DATA
+--------------------
+
+--------------------
+ADDING DATA
+--------------------
+
+--------------------
+ADDING DATA
+--------------------

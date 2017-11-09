@@ -202,5 +202,5 @@ function getRefs(component) {
 // within a class component...
 handleSubmit: function() {
 	var data = getRefs(this);
-	this.props.onGameFormSubmitted(data);
+	this.props.doSomething(data);
 }
