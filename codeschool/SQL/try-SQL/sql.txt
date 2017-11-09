@@ -109,12 +109,37 @@ REMOVING DATA
 	DELETE FROM movies WHERE duration < 120;
 
 --------------------
-ADDING DATA
+CREATING AND REMOVING DATABASES AND TABLES
 --------------------
 
+- CREATE DATABASE
+	CREATE DATABASE cineplex dundas theaters;
+
+- DROP DATABASE
+	DROP DATABASE cineplex dundas theaters;
+
+- CREATE TABLE
+	CREATE TABLE movies
+	(
+		id int,
+		title varchar(50),
+		genre varchar(15),
+		duration int
+	);
+
+- DROP TABLE
+	DROP TABLE movies;
+
 --------------------
-ADDING DATA
+MANIPULATING TABLES
 --------------------
+
+- ALTER TABLE
+	ALTER TABLE movies
+	ADD COLUMN ratings int;
+
+	ALTER TABLE movies
+	DROP COLUMN ratings;
 
 --------------------
 ADDING DATA
