@@ -1,0 +1,35 @@
+--------------------
+INTRODUCTION
+--------------------
+
+- why are builds necessary?
+	- combining files
+	- minifying files
+	- maintaining file order
+	- transpilation
+	- linting
+- other solutions
+	- server-side tools: ASP.NET, rails, etc
+	- task runners: grunt, gulp, etc
+- webpack = specialized task runner
+	- processing input files and output files
+	- utilizes components called loaders
+	- can set up transpilation --> concatentation --> minification
+	- can also combine CSS into JS (less common with task runners)
+- webpack conventions
+	- use npm not bower
+	- use module system: amd, commonjs, es6 modules
+
+- module systems
+	- express dependencies between modules (generally files in JS)
+
+	- commonjs
+		var bands = require('./Bands'); // requires path
+		var Backbone = require('Backbone'); // no path because installed with npm
+
+--------------------
+BASIC BUILDS
+--------------------
+
+- CLI
+	- webpack ./app.js bundle.js

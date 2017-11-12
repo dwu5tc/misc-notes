@@ -1,0 +1,296 @@
+--------------------
+COMMON AGGREGRATE FUNCTIONS
+--------------------
+
+- commands: count, sum, avg, max, min
+	- structure
+		SELECT <command>(column_name)
+		FROM table_name
+
+	SELECT count(title)
+	FROM Movies;
+
+	SELECT sum(cost)
+	FROM Movies;
+
+	SELECT avg(tickets)
+	FROM Movies;
+
+	SELECT max(tickets)
+	FROM Movies;
+
+	- multiple
+		SELECT max(tickets), min(tickets)
+		FROM Movies;
+
+- GROUP BY
+	SELECT genre, sum(cost)
+	FROM Movies
+	GROUP BY genre;
+
+- having more than 1 row per group
+	SELECT genre, sum(cost)
+	FROM Movies
+	GROUP BY genre
+	HAVING COUNT(*) > 1;
+
+	SELECT genre, sum(cost)
+	FROM Movies
+	WHERE cost >= 1000000
+	GROUP BY genre
+	HAVING COUNT(*) > 1;
+
+--------------------
+CONSTRAINTS
+--------------------
+
+- throw error when adding a row with no name field
+- prevent duplicate values 
+- aka column constraint
+	CREATE TABLE Promotions
+	(
+		id int,
+		name varchar(50) NOT NULL UNIQUE,
+		category varchar(15)
+	);
+
+- define custom constraint names (aka table constraint)
+	CREATE TABLE Promotions
+	(
+		id int,
+		name varchar(50) NOT NULL,
+		category varchar(15)
+		CONSTRAINT unique_name UNIQUE (name)
+	);
+
+- ok to have same name, but not BOTH same name and same category
+	CONSTRAINT unique_name UNIQUE (name, category)
+
+- primary key (unique and not null)
+	id int PRIMARY KEY
+
+--------------------
+VALUE CONSTRAINTS
+--------------------
+
+- foreign key (column in a table referencing the primary key column of another table)
+
+- querying for relationship data
+	SELECT id
+	FROM Movies
+	WHERE title = 'Inception';
+
+	SELECT name, category
+	FROM Promotions
+	WHERE movie_id = 2;
+
+- creating foreign key constraint 
+	CREATE TABLE Movies
+	(
+		id int PRIMARY KEY,
+		title varchar(20) NOT NULL UNIQUE
+	);
+
+	CREATE TABLE Promotions
+	(
+		id int PRIMARY KEY,
+		movie_id int REFERENCES Movies(id)
+		name varchar(50),
+		category varchar(15)
+	);
+	- shorter
+		movies_id int REFERENCES Movies
+
+	- or another way
+		FOREIGN KEY (movie_id) REFERENCES Movies
+
+- orphan records
+- when the parent/referenced record gets deleted
+- foreign key constraint avoids this
+	- e.g
+		DELETE FROM Movies WHERE id = 5;
+	- would throw error since that record is still referenced
+
+	- would have to
+		DELETE FROM Promotions WHERE movie_id = 6
+		DELETE FROM Movies WHERE id = 6
+	
+	- same with tables
+		DROP TABLE Movies;
+
+	- has to become
+		DROP TABLE Promotions;
+		DROP Table Movies;
+
+- CHECK constraint
+	CREATE TABLE Movies
+	(
+		id int PRIMARY KEY,
+		title varchar(20) NOT NULL UNIQUE,
+		genre varchar(100),
+		duration int CHECK (duration > 0)
+	);
+
+--------------------
+NORMALIZATION
+--------------------
+
+- process of reducing duplication in database tables
+- rules
+	- tables must not contain repeating groups of data in 1 col
+	- tables must not contain redundancy (unnecessary repeating info)
+
+- solving this problem
+	- movies table --> movies + genres + join tables
+	- movies table 
+		- id, title, duration
+	- genres table
+		- id, genre
+	- movies_genres (join table)
+		- movie_id, genre_id 
+
+- complicates gathering data
+	- to find the genre of a movie...
+		1. find movie id (movies table)
+		2. find genre id corresponding to movie id (movies_genres table)
+		3. find genre name (genres table)
+
+	SELECT id
+	FROM Movies
+	WHERE title = "Inception";
+
+	SELECT genre_id
+	FROM Movies_Genres
+	WHERE movie_id = 5;
+
+	SELECT name
+	FROM Genres
+	WHERE id = 2 or id = 3;
+
+	- shorter last line would be
+		WHERE id IN (2, 3);
+
+--------------------
+RELATIONSHIPS
+--------------------
+- one-to-many relationship
+	- e.g movies and reviews
+
+- many-to-many relationship
+	- e.g movies and promotions
+	- needs a join table
+
+- one-to-one relationship
+
+--------------------
+JOINS AND ALIASES
+--------------------
+
+- INNER JOIN
+	- get a list of reviews and associated movies titles
+		SELECT review, movie_id
+		FROM Reviews;
+
+		SELECT title
+		FROM Movies
+		WHERE id in (1, 3, 4);
+
+	- more concise with inner join
+		SELECT *
+		FROM Movies
+		INNER JOIN Reviews
+		ON Movies.id = Reviews.movie_id;
+
+		or 
+
+		SELECT *
+		FROM Reviews
+		INNER JOIN Movies
+		ON Reviews.movie_id = Movies.id;
+
+	- filter down returned fields
+		SELECT Movies.title, REviews.review...
+
+	- multiple tables
+	- find the genres of Inception
+		SELECT Movies.title, Genres.name
+		FROM Movies
+		INNER JOIN Movies_Genres
+		On Movies.id = Moives_Genres.movie_id
+		INNER JOIN Genres
+		ON Movies_Genres.genre_id = Genres.id
+		WHERE Movies.title = "Inception";
+
+- column aliases
+	SELECT Movies.title films, Reviews.review reviews...
+
+	- for multi-word or capitalization
+		SELECT Movies.title "Movie", Reviews.review "Movie Review"
+
+- table aliases
+	SELECT m.title, r.review
+	FROM Movies m
+	INNER JOIN Reviews r
+	ON m.id = r.movie_id
+	ORDERBY m.title;
+
+	SELECT m.title, g.name
+	FROM MOVIES m
+	INNER JOIN Movies_Genres mg
+	ON m.id = mg.movie_id
+	INNER JOIN Genres g
+	ON mg.genre_id = g.id
+	WHERE m.title = "Inception";
+
+- OUTER JOIN
+	- display all movies and matching reviews (if they exist)
+		SELECT m.title, r.review
+		FROM Movies m 
+		LEFT OUTER JOIN Reviews r
+		ON Movies.id = Reviews.movie_id
+		ORDER BY r.id;
+
+	- display all reviews and matching movies (if they exist)
+		SELECT m.title, r.review
+		FROM Movies m
+		RIGHT OUTER JOIN Reviews r
+		ON m.id = r.movie_id
+		ORDER BY r.id;
+
+--------------------
+SUBQUERIES
+--------------------
+- easier to read
+	SELECT sum(sales)
+	FROM Movies
+	WHERE id IN
+		(SELECT movie_id
+		FROM Promotions
+		WHERE category = 'Discount');
+
+- as a JOIN query (more performant)
+	SELECT sum(m.sales)
+	FROM Movies m
+	INNER JOIN Promotions p
+	ON m.id = p.movie_id
+	WHERE p.category = 'Discount';
+
+- subquery synxtax
+	- filter rows that have a matching id
+		WHERE <field> IN(<subquery>)
+
+	- filter rows that dont have a matching id
+	WHERE <field> NOT IN(<subquery>)
+
+- correlated subquery
+	- following will throw ERROR: aggregate functions are not allowed in WHERE
+		SELECT * 
+		FROM Movies 
+		Where duration > avg(duration)
+
+	- instead
+		SELECT * 
+		FROM Movies 
+		WHERE duration >
+			(SELECT avg(duration)
+			FROM Movies);

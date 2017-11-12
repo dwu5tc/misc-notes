@@ -7,9 +7,9 @@ INTRODUCTION
 - e.g
 	- id / title / genre / duration
 
-	- 1 / 22 jump street / comedy / 120
-	- 2 / inception / sci-fi / 180
-	- 3 / definitely, maybe / rom-com / 90
+	- 1 / 22 Jump Street / Comedy / 120
+	- 2 / Inception / Sci-Fi / 180
+	- 3 / Definitely, Maybe / Rom-Com / 90
 	- ...
 - sometimes unique identifier (id) = primary key
 
@@ -24,29 +24,29 @@ SQL LANGUAGE
 
 - SELECT
 	SELECT title
-	FROM movies;
+	FROM Movies;
 
 	SELECT id, title, genre duration
-	FROM movies;
+	FROM Movies;
 
 	SELECT *
-	FROM movies;
+	FROM Movies;
 
 	SELECT title
-	FROM movies
+	FROM Movies
 	WHERE id = 2;
 
 	SELECT *
-	FROM movies
+	FROM Movies
 	WHERE title = 'inception';
 
 - ORDER BY for sorting (defaults to ascending)
 	SELECT title
-	FROM movies
+	FROM Movies
 	ORDER BY duration DESC;
 
 	SELECT *
-	FROM movies
+	FROM Movies
 	WHERE duration > 100;
 
 - >, <, >=, <=
@@ -54,31 +54,31 @@ SQL LANGUAGE
 
 - AND operator
 	SELECT title
-	FROM movies
+	FROM Movies
 	WHERE id = 1
-	AND genre = 'comedy';
+	AND genre = 'Comedy';
 
 - OR operator
 	SELECT title
-	FROM movies
+	FROM Movies
 	WHERE id = 1
-	OR genre = 'comedy';
+	OR genre = 'Comedy';
 
 --------------------
 ADDING DATA
 --------------------
 
 - INSERT
-	INSERT INTO movies (id, title, genre, duration)
-	VALUES (5, 'your name', 'drama', 120);
+	INSERT INTO Movies (id, title, genre, duration)
+	VALUES (5, 'Your Name', 'Drama', 120);
 
 	OR quicker method
 
-	INSERT INTO movies
-	VALUES (5, 'your name', 'drama', 120);
+	INSERT INTO Movies
+	VALUES (5, 'Your Name', 'Drama', 120);
 
-	INSERT INTO movies (title, duration)
-	VALUES ('your name', 120);
+	INSERT INTO Movies (title, duration)
+	VALUES ('Your Name', 120);
 
 - NULL value represents fields with missing data or acts as placeholders for unknown data 
 
@@ -89,12 +89,12 @@ CHANGING CURRENT DATA
 --------------------
 
 - UPDATE
-	UPDATE movies
-	SET genre = 'romance', duration = 90
+	UPDATE Movies
+	SET genre = 'Romance', duration = 90
 	WHERE id = 5;
 
-	UPDATE movies
-	SET genre = 'romance'
+	UPDATE Movies
+	SET genre = 'Romance'
 	WHERE id = 3 OR id = 5;
 
 --------------------
@@ -102,24 +102,24 @@ REMOVING DATA
 --------------------
 
 - DELETE
-	DELETE FROM movies WHERE id = 5;
+	DELETE FROM Movies WHERE id = 5;
 
-	DELETE FROM movies (***would delete everything!!!)
+	DELETE FROM Movies (would delete everything!!!)
 
-	DELETE FROM movies WHERE duration < 120;
+	DELETE FROM Movies WHERE duration < 120;
 
 --------------------
 CREATING AND REMOVING DATABASES AND TABLES
 --------------------
 
 - CREATE DATABASE
-	CREATE DATABASE cineplex dundas theaters;
+	CREATE DATABASE Cineplex Dundas Theaters;
 
 - DROP DATABASE
-	DROP DATABASE cineplex dundas theaters;
+	DROP DATABASE Cineplex Dundas Theaters;
 
 - CREATE TABLE
-	CREATE TABLE movies
+	CREATE TABLE Movies
 	(
 		id int,
 		title varchar(50),
@@ -128,23 +128,17 @@ CREATING AND REMOVING DATABASES AND TABLES
 	);
 
 - DROP TABLE
-	DROP TABLE movies;
+	DROP TABLE Movies;
 
 --------------------
 MANIPULATING TABLES
 --------------------
 
 - ALTER TABLE
-	ALTER TABLE movies
+	ALTER TABLE Movies
 	ADD COLUMN ratings int;
 
-	ALTER TABLE movies
+	ALTER TABLE Movies
 	DROP COLUMN ratings;
 
---------------------
-ADDING DATA
---------------------
 
---------------------
-ADDING DATA
---------------------

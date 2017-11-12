@@ -26,10 +26,10 @@ constructor(props) {
 	this.state= { counter: 0 };
 }
 
-// leverage ES2015... ??? check this
+// leverage ES2015... 2017??? check this
 state = { counter: 0 };
 
-// no need to bind with ES2015
+// no need to bind with ES2015 (2017???)
 // but somewhere said arrow functions aren't good and should use binding??? check this
 handleClick = () => {
 	this.setState({

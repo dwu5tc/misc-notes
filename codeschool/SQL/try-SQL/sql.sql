@@ -1,34 +1,34 @@
 SELECT id, title
-FROM movies
+FROM Movies
 WHERE duration >= 90
-AND genre = 'comedy'
+AND genre = 'Comedy'
 ORDER BY duration;
 
 SELECT id, title
-FROM movies
+FROM Movies
 WHERE duration >= 90
-AND genre = 'comedy'
+AND genre = 'Comedy'
 ORDER BY duration;
 
-INSERT INTO concessions ('item', size)
-VALUES ('nachos', 'regular');
+INSERT INTO Concessions ('item', size)
+VALUES ('Nachos', 'Regular');
 
-INSERT INTO concessions ('id', 'item', 'price')
-VALUES (8, 'pizza', '2.00');
+INSERT INTO Concessions ('id', 'item', 'price')
+VALUES (8, 'Pizza', '2.00');
 
-UPDATE concessions 
-SET item = 'hamburger'
-WHERE item = 'pizza';
+UPDATE Concessions 
+SET item = 'Hamburger'
+WHERE item = 'Pizza';
 
-UPDATE concessions
+UPDATE Concessions
 SET price = '1.00'
-WHERE item = 'popcorn' OR item = 'candy';
+WHERE item = 'Popcorn' OR item = 'Candy';
 
-DELETE FROM movies WHERE genre = 'comedy';
+DELETE FROM Movies WHERE genre = 'Comedy';
 
-DELETE FROM movies WHERE duration > 120 OR title = 'inception';
+DELETE FROM Movies WHERE duration > 120 OR title = 'Inception';
 
-CREATE TABLE advertisements
+CREATE TABLE Advertisements
 (
 	id int,
 	name varchar(10),
@@ -36,11 +36,11 @@ CREATE TABLE advertisements
 	cost int
 );
 
-INSERT INTO advertisements (id, name, cost)
-VALUES (1, 'commercial', 150);
+INSERT INTO Advertisements (id, name, cost)
+VALUES (1, 'Commercial', 150);
 
-UPDATE advertisements
-SET category = 'television'
-WHERE name = 'commercial';
+UPDATE Advertisements
+SET category = 'Television'
+WHERE name = 'Commercial';
 
-DROP TABLE advertisements;
+DROP TABLE Advertisements;
