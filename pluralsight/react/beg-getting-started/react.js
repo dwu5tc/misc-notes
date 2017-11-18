@@ -207,7 +207,7 @@ const Stars = (props) => {
 
 const Button = (props) => {
 	let button;
-	switch(props.answerIsCorrect){
+	switch(props.answerIsCorrect) {
 		case true:
 			button = 
 				<button className="btn btn-success"
@@ -221,6 +221,7 @@ const Button = (props) => {
 				<button className="btn btn-danger">
 					<i className="fa fa-times"></i>
 				</button>
+			break;
 		default:
 			button = 
 				<button className="btn"
@@ -229,7 +230,6 @@ const Button = (props) => {
 				>
 					=
 				</button>
-			break;
 	}
 
 	return (

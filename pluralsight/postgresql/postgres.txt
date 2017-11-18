@@ -1,0 +1,44 @@
+- object relational database management system
+- key features
+	- sql:2011 standard
+	- ACID compliant
+	- indexes
+	- views, triggers, procedures, functions
+	- relationships
+	- multiversion concurrency control 
+	- sql:2008 datatypes
+		- integer, numeric, boolean, char, varchar, date, interval, timestamp
+	- native programming interface
+
+- pg_restore -U postgres -d dvdrental C:\dvdrental.tar
+
+- COPY actor TO 'C:\actor.csv' DELIMITER ',' CSV;
+
+- list unique first name along with the count of occurrence from actor table
+	SELECT first_name, COUNT(first_name)
+	FROM Actor
+	WHERE actor_id BETWEEN 100 and 200
+	GROUP BY first_name
+
+- to filter down grouped/aggregated result set, cannot use WHERE, must use HAVING
+- list all the first names which occur more than 1 time
+	SELECT first_name, COUNT(first_name)
+	FROM Actor
+	WHERE actor_id BETWEEN 100 and 200
+	GROUP BY first_name
+	HAVING COUNT(first_name) > 1
+
+- e.g
+	CREATE TABLE actor
+	(
+		actor_id integer NOT NULL DEFAULT nextval('actor_actor_id_seq'::regclass),
+		first_name character varying(45) NOT NULL,
+		last_name character varying(45) NOT NULL,
+		last_update timestamp without time zone NOT NULL DEFAULT now(),
+		CONSTRAINT actor_pkey PRIMARY KEY (actor_id)
+	)
+		- actor_id value generated from sequence every time a new row is inserted in the table
+		- first_name and last_name are strings up to 45 char long
+		- last_update has DEFAULT value now --> every time a record = inserted, this col is auto updated with current timestamp
+		- actor_id and last_update are autopopulated
+
