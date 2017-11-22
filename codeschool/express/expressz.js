@@ -162,7 +162,7 @@ module.exports = function(req, res, next) { // export it as a node module and ma
 
 // app.js
 var express = require('express');
-var app = expresS();
+var app = express();
 
 var logger = require('./logger');
 app.use(logger);
@@ -244,7 +244,7 @@ app.get('/blocks/:name', function(req, res) {
 // handle this by returning 404 status codes with explanation
 ...
 if (!desc) {
-	res.status(404).json('no descrption found for ' + req.params.name);
+	res.status(404).json('no description found for ' + req.params.name);
 }
 ...
 
@@ -448,6 +448,6 @@ var app = express();
 app.use(express.static('public'));
 
 var blocks = require('./routes/blocks');
-app.use('/blocks, blocks');
+app.use('/blocks', blocks);
 
 app.listen(3000);

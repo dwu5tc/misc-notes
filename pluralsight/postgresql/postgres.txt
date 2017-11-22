@@ -42,3 +42,48 @@
 		- last_update has DEFAULT value now --> every time a record = inserted, this col is auto updated with current timestamp
 		- actor_id and last_update are autopopulated
 
+- inner join returns rows when there is at least one match in both the tables
+- retrieve all the students who have signed up for classes
+	SELECT st.StudentName, cl.ClassName
+	FROM StudentClass sc
+	INNER JOIN Students st ON st.StudentID = sc.StudentID
+	INNER JOIN Classes cl ON cl.ClassID = sc.ClassID;
+
+	- Student table contains studentid and studentname
+	- Class table contains contains classid and classname
+	- StudentClass table contains studentid and classid
+
+- left outer join returns all the rows from the left table with the matching rows from the right table
+- if no columns matching in the right table, it returns NULL values
+- retrieve all students who have signed up for NO classes
+	SELECT st.StudentName
+	FROM Students st
+	LEFT JOIN StudentClass sc ON st.StudentID = sc.StudentID
+	LEFT JOIN Classes cl ON cl.ClassID = sc.ClassID
+	WHERE cl.ClassName is NULL;
+- alternate solution
+	SELECT st.StudentName
+	FROM Students st
+	LEFT JOIN StudentClass sc ON st.StudentID = sc.StudentID
+	WHERE sc.ClassID is NULL;
+
+- right outer join returns all the rows from the right table with the matching rows from the left table
+- if there are no columns matching in the left table, it returns NULL values
+- retrieve all the classes not signed up by any students 
+	SELECT cl.ClassName
+	FROM Students st
+	RIGHT JOIN StudentClass sc ON st.StudentID = sc.StudentID
+	RIGHT JOIN Classes cl ON cl.ClassID = sc.ClassID
+	WHERE st.StudentID is NULL;
+
+- check maximum capicity of classes (assign all students to each class)
+- cross/cartesian join
+	SELECT st.StudentName, cl.ClassName
+	FROM Classes cl
+	CROSS JOIN Students st;
+
+	- with 4 student and 4 classes, returns 16 rows
+
+- full outer join
+- retrieve list of enrolled students + students who did not sign up for any classes + classes not signed up by any students
+- returns rows from either table when conditions are met and returns NULL value when there is no match
