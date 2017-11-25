@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block title %}Koa Vote{% endblock %}
+
+{% block content %}
+	<h1>Current Questions</h1>
+	<div>
+		{% for question in questions %}
+		<div>
+			<h4>{{ question.title }}</h4>
+			<a href='/vote?questionId={{ question._id.toString() }}'>
+				Vote Here
+			</a>
+			<a href='/question/{{ question._id.toString() }}'>
+				Update Here
+			</a>
+		</div>
+		{% endfor %}
+	</div>
+	<br>
+	<a href="/question">Create a New Question</a>
+{% endblock %}
+
+

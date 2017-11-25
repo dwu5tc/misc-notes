@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}New Question{% endblock %}
+
+{% block content %}
+	<h1>Create New Question</h1>
+	<form name='questionForm' action='/question' method='post'>
+		<div>
+			<label>Question</label>
+			<div>
+				<input type='text' name='questionTitle'>
+			</div>
+		</div>
+		<div>
+			<label>Tags:</label>
+			<div>
+				<input type='text' name='tagString'>
+			</div>
+		</div>
+		<div>
+			<div>
+				<input type='submit' value='Add Question' name=''>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+
+

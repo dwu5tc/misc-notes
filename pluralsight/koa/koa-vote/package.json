@@ -1,0 +1,12 @@
+{
+  "name": "koa-vote",
+  "version": "1.0.0",
+  "description": "dd: mocha, supertest, co, should // d: koa-route, koa, co-views, swig, koa-static, monk, co-monk, co-body",
+  "main": "app.js",
+  "scripts": {
+    "start": "node --harmony app.js",
+    "test": "./node_modules/mocha/bin/mocha --harmony-generators -u bdd -R spec"
+  },
+  "author": "",
+  "license": "ISC"
+}
